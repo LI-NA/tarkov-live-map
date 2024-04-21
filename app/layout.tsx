@@ -9,7 +9,7 @@ const pretendard = localFont({
 });
 
 export const metadata: Metadata = {
-    title: "Tarkov Live Map",
+    title: "✨Tarkov Live Map✨",
     description:
         "A project that allows the user to view a map in the game Escape From Tarkov and show the current location and share it with friends.",
 };
@@ -21,7 +21,8 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={pretendard.className}>{children}</body>
+            <body className={`${pretendard.className} dark`}>
+                {children}</body>
         </html>
     );
 }
