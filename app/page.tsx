@@ -17,7 +17,7 @@ export default function Home() {
                     >
                         By{" "}
                         <Image
-                            src="/vercel.svg"
+                            src="/tarkov-live-map/vercel.svg"
                             alt="Vercel Logo"
                             className="dark:invert"
                             width={100}
