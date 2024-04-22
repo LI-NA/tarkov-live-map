@@ -329,6 +329,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@radix-ui/react-collection@npm:1.0.3":
+  version: 1.0.3
+  resolution: "@radix-ui/react-collection@npm:1.0.3"
+  dependencies:
+    "@babel/runtime": "npm:^7.13.10"
+    "@radix-ui/react-compose-refs": "npm:1.0.1"
+    "@radix-ui/react-context": "npm:1.0.1"
+    "@radix-ui/react-primitive": "npm:1.0.3"
+    "@radix-ui/react-slot": "npm:1.0.2"
+  peerDependencies:
+    "@types/react": "*"
+    "@types/react-dom": "*"
+    react: ^16.8 || ^17.0 || ^18.0
+    react-dom: ^16.8 || ^17.0 || ^18.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    "@types/react-dom":
+      optional: true
+  checksum: 10c0/cefa56383d7451ca79e4bd5a29aaeef6c205a04297213efd149aaead82fc8cde4fb8298e20e6b3613e5696e43f814fb4489805428f6604834fb31f73c6725fa8
+  languageName: node
+  linkType: hard
+
 "@radix-ui/react-compose-refs@npm:1.0.1":
   version: 1.0.1
   resolution: "@radix-ui/react-compose-refs@npm:1.0.1"
@@ -555,6 +578,37 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@radix-ui/react-toast@npm:^1.1.5":
+  version: 1.1.5
+  resolution: "@radix-ui/react-toast@npm:1.1.5"
+  dependencies:
+    "@babel/runtime": "npm:^7.13.10"
+    "@radix-ui/primitive": "npm:1.0.1"
+    "@radix-ui/react-collection": "npm:1.0.3"
+    "@radix-ui/react-compose-refs": "npm:1.0.1"
+    "@radix-ui/react-context": "npm:1.0.1"
+    "@radix-ui/react-dismissable-layer": "npm:1.0.5"
+    "@radix-ui/react-portal": "npm:1.0.4"
+    "@radix-ui/react-presence": "npm:1.0.1"
+    "@radix-ui/react-primitive": "npm:1.0.3"
+    "@radix-ui/react-use-callback-ref": "npm:1.0.1"
+    "@radix-ui/react-use-controllable-state": "npm:1.0.1"
+    "@radix-ui/react-use-layout-effect": "npm:1.0.1"
+    "@radix-ui/react-visually-hidden": "npm:1.0.3"
+  peerDependencies:
+    "@types/react": "*"
+    "@types/react-dom": "*"
+    react: ^16.8 || ^17.0 || ^18.0
+    react-dom: ^16.8 || ^17.0 || ^18.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    "@types/react-dom":
+      optional: true
+  checksum: 10c0/1263f1fd4b53f563c0eace84582ff0c82b515100230e35a17b95c44ad420a4e9c156be28787398d3a455d699292dde4dd23311e1d8a0c23ec36931ff6e5a6935
+  languageName: node
+  linkType: hard
+
 "@radix-ui/react-use-callback-ref@npm:1.0.1":
   version: 1.0.1
   resolution: "@radix-ui/react-use-callback-ref@npm:1.0.1"
@@ -614,6 +668,26 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 10c0/13cd0c38395c5838bc9a18238020d3bcf67fb340039e6d1cbf438be1b91d64cf6900b78121f3dc9219faeb40dcc7b523ce0f17e4a41631655690e5a30a40886a
+  languageName: node
+  linkType: hard
+
+"@radix-ui/react-visually-hidden@npm:1.0.3":
+  version: 1.0.3
+  resolution: "@radix-ui/react-visually-hidden@npm:1.0.3"
+  dependencies:
+    "@babel/runtime": "npm:^7.13.10"
+    "@radix-ui/react-primitive": "npm:1.0.3"
+  peerDependencies:
+    "@types/react": "*"
+    "@types/react-dom": "*"
+    react: ^16.8 || ^17.0 || ^18.0
+    react-dom: ^16.8 || ^17.0 || ^18.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    "@types/react-dom":
+      optional: true
+  checksum: 10c0/0cbc12c2156b3fa0e40090cafd8525ce84c16a6b5a038a8e8fc7cbb16ed6da9ab369593962c57a18c41a16ec8713e0195c68ea34072ef1ca254ed4d4c0770bb4
   languageName: node
   linkType: hard
 
@@ -720,6 +794,13 @@ __metadata:
   version: 2.0.3
   resolution: "@types/sort-json@npm:2.0.3"
   checksum: 10c0/2775038deb38448493c2287b1ddaf9e4f0dda84a15ab297f7974f3077f13981c0b2e1eb086c8c0ad93bcfcc2726d33bbc3bf9ec54d9244b6649d3461e64943ec
+  languageName: node
+  linkType: hard
+
+"@types/wicg-file-system-access@npm:^2023.10.5":
+  version: 2023.10.5
+  resolution: "@types/wicg-file-system-access@npm:2023.10.5"
+  checksum: 10c0/3c6099320a2517ab405bd65712eb19ba2c1f7f0c30f952744102b76809ed9ad5205f881c79ebe6f92ac7af7a13667df8c23dd59b0a5182119c74afa17335bfd3
   languageName: node
   linkType: hard
 
@@ -4536,10 +4617,12 @@ __metadata:
     "@radix-ui/react-alert-dialog": "npm:^1.0.5"
     "@radix-ui/react-icons": "npm:^1.3.0"
     "@radix-ui/react-slot": "npm:^1.0.2"
+    "@radix-ui/react-toast": "npm:^1.1.5"
     "@types/node": "npm:^20"
     "@types/react": "npm:^18"
     "@types/react-dom": "npm:^18"
     "@types/sort-json": "npm:^2"
+    "@types/wicg-file-system-access": "npm:^2023.10.5"
     "@typescript-eslint/eslint-plugin": "npm:^7.7.0"
     "@typescript-eslint/parser": "npm:^7.7.0"
     class-variance-authority: "npm:^0.7.0"

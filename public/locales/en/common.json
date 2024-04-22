@@ -18,5 +18,7 @@
   "map.initDialog.title": "Please select tarkov screenshot folder.",
   "map.initDialog.description": "You need to specify your own folder for Tarkov's screenshots for the real-time location display feature. If you don't want to specify a screenshot folder and just want to see your friend's location, press Close this dialog.",
   "map.initDialog.action": "Select screenshot folder",
-  "map.initDialog.close": "Close"
+  "map.initDialog.close": "Close",
+  "map.initDialog.toast.permissionDenied.title": "Permission Denied.",
+  "map.initDialog.toast.permissionDenied.description": "This app requires full read/write access to the screenshots folder. Please select the folder and allow the permission request that follows."
 }

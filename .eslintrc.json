@@ -10,5 +10,13 @@
         "project": "./tsconfig.json"
     },
     "plugins": ["@typescript-eslint"],
-    "root": true
+    "root": true,
+    "rules": {
+        "@typescript-eslint/no-misused-promises": [
+            "error",
+            {
+                "checksVoidReturn": false
+            }
+        ]
+    }
 }

@@ -3,6 +3,8 @@ import Head from "next/head";
 import localFont from "next/font/local";
 import { appWithTranslation, useTranslation } from "next-i18next";
 
+import { Toaster } from "@/components/ui/toaster";
+
 import "@/styles/globals.css";
 
 const pretendard = localFont({
@@ -21,6 +23,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                 <meta name="description" content={t("head.description")} />
             </Head>
             <Component {...pageProps} />
+            <Toaster />
         </div>
     );
 };

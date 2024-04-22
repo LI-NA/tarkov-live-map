@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
@@ -15,6 +15,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useToast } from "@/components/ui/use-toast";
 
 import { mergeI18nPaths, makeStaticProps } from "@/lib/getStatic";
 import { getQueryWithoutUndefined } from "@/lib/query";
@@ -41,14 +42,47 @@ const MapStage = dynamic(() => import("@/components/map-stage"), {
 export default function MapIndex() {
     const router = useRouter();
     const { t } = useTranslation("common");
+    const { toast } = useToast();
 
     const map = getQueryWithoutUndefined<Map>(router.query.map);
 
     const [initDialogOpen, setInitDialogOpen] = useState(false);
+    const [directoryStatus, setDirectoryStatus] = useState(false);
 
-    const onClickInitDialogAction = useCallback(() => {
-        // Do something
-    }, []);
+    const directoryHandleRef = useRef<FileSystemDirectoryHandle | null>(null);
+
+    const onClickInitDialogAction = useCallback(async () => {
+        try {
+            const dirHandle = await window.showDirectoryPicker({
+                startIn: "documents",
+            });
+
+            if (
+                (await dirHandle.queryPermission({ mode: "readwrite" })) === "granted" ||
+                (await dirHandle.requestPermission({ mode: "readwrite" })) === "granted"
+            ) {
+                // Read and write access has been granted.
+                directoryHandleRef.current = dirHandle;
+                setDirectoryStatus(true);
+                setInitDialogOpen(false);
+            } else {
+                // The user didn't grant permission.
+                toast({
+                    variant: "destructive",
+                    title: t("map.initDialog.toast.permissionDenied.title"),
+                    description: t("map.initDialog.toast.permissionDenied.description"),
+                });
+            }
+        } catch (error) {
+            console.error(error);
+
+            toast({
+                variant: "destructive",
+                title: t("map.initDialog.toast.permissionDenied.title"),
+                description: t("map.initDialog.toast.permissionDenied.description"),
+            });
+        }
+    }, [t, toast]);
 
     const onClickInitDialogClose = useCallback(() => {
         setInitDialogOpen(false);
@@ -62,6 +96,7 @@ export default function MapIndex() {
 
     return (
         <>
+            <div></div>
             <MapStage map={map} />
             <AlertDialog open={initDialogOpen}>
                 <AlertDialogContent>
@@ -71,7 +106,7 @@ export default function MapIndex() {
                             <p>{t("map.initDialog.description")}</p>
                         </AlertDialogDescription>
                     </AlertDialogHeader>
-                    <AlertDialogFooter>
+                    <AlertDialogFooter className="gap-y-2">
                         <AlertDialogAction onClick={onClickInitDialogAction}>
                             {t("map.initDialog.action")}
                         </AlertDialogAction>

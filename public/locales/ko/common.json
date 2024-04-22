@@ -18,5 +18,7 @@
   "map.initDialog.title": "타르코프 스크린샷 폴더를 선택해주세요.",
   "map.initDialog.description": "실시간 위치 표시 기능을 사용하려면 타르코프의 스크린샷이 저장되는 폴더를 직접 지정해야 합니다. 스크린샷 폴더를 지정하지 않고 친구의 위치만 보려면 하단에 닫기를 누르세요.",
   "map.initDialog.action": "스크린샷 폴더 선택",
-  "map.initDialog.close": "닫기"
+  "map.initDialog.close": "닫기",
+  "map.initDialog.toast.permissionDenied.title": "권한이 거부되었습니다.",
+  "map.initDialog.toast.permissionDenied.description": "이 앱을 사용하기 위해서는 스크린샷 폴더의 읽기/쓰기 권한이 모두 필요합니다. 폴더를 선택한 뒤 나오는 권한 요청을 허용해주세요."
 }
