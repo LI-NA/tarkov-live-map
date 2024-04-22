@@ -96,7 +96,6 @@ export default function MapIndex() {
 
     return (
         <>
-            <div></div>
             <MapStage map={map} />
             <AlertDialog open={initDialogOpen}>
                 <AlertDialogContent>

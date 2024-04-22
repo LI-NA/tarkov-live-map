@@ -17,6 +17,8 @@
             {
                 "checksVoidReturn": false
             }
-        ]
-    }
+        ],
+        "@typescript-eslint/no-unused-vars": "warn"
+    },
+    "ignorePatterns": [".next/", "out/", "components/ui/", "devServer.js"]
 }
