@@ -8,5 +8,14 @@
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "files.associations": {
     "*.css": "tailwindcss"
-  }
+  },
+  "i18n-ally.localesPaths": [
+    "public/locales"
+  ],
+  "i18n-ally.enabledFrameworks": [
+    "react-i18next"
+  ],
+  "i18n-ally.editor.preferEditor": true,
+  "i18n-ally.namespace": true,
+  "i18n-ally.keystyle": "flat"
 }

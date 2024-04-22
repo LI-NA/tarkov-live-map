@@ -1,5 +1,7 @@
 import type { AppProps } from "next/app";
+import Head from "next/head";
 import localFont from "next/font/local";
+import { appWithTranslation, useTranslation } from "next-i18next";
 
 import "@/styles/globals.css";
 
@@ -9,10 +11,18 @@ const pretendard = localFont({
     variable: "--font-pretendard",
 });
 
-export default function App({ Component, pageProps }: AppProps) {
+const App = ({ Component, pageProps }: AppProps) => {
+    const { t } = useTranslation("common");
+
     return (
         <div className={pretendard.className}>
+            <Head>
+                <title>✨{t("head.title")}✨</title>
+                <meta name="description" content={t("head.description")} />
+            </Head>
             <Component {...pageProps} />
         </div>
     );
-}
+};
+
+export default appWithTranslation(App);

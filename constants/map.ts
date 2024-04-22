@@ -45,19 +45,6 @@ export type Map = (typeof MAP)[keyof typeof MAP];
 
 export const MAPS = Object.values(MAP);
 
-export const MAP_TITLE = {
-    [MAP.CUSTOMS]: "Customs",
-    [MAP.FACTORY]: "Factory",
-    [MAP.GROUND_ZERO]: "Ground Zero",
-    [MAP.INTERCHANGE]: "Interchange",
-    [MAP.LABS]: "Labs",
-    [MAP.LIGHTHOUSE]: "Lighthouse",
-    [MAP.RESERVE]: "Reserve",
-    [MAP.SHORELINE]: "Shoreline",
-    [MAP.STREETS_OF_TARKOV]: "Streets of Tarkov",
-    [MAP.WOODS]: "Woods",
-} as const;
-
 export const MAP_CONFING = {
     [MAP.CUSTOMS]: {
         enable: false,

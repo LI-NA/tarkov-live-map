@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { Stage, Layer, Image } from "react-konva";
 import useImage from "use-image";
 
-import { MAP_TITLE, MAP_CONFING } from "@/constants/map";
+import { MAP_CONFING } from "@/constants/map";
 
 import type { KonvaEventObject } from "konva/lib/Node";
 import type { Vector2d } from "konva/lib/types";
@@ -140,7 +140,8 @@ const MapStage = ({ map }: { map: MapType }) => {
             ref={stageRef}
         >
             <Layer>
-                <Image image={mapImage} alt={MAP_TITLE[map]} />
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                <Image image={mapImage} />
             </Layer>
         </Stage>
     );

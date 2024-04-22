@@ -10,7 +10,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "sort": "sort-json ./public/locales/**/*.json"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.0.5",
@@ -18,10 +19,14 @@
     "@radix-ui/react-slot": "^1.0.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "i18next": "^23.11.2",
     "konva": "^9.3.6",
     "next": "14.2.2",
+    "next-i18next": "^15.3.0",
+    "next-language-detector": "^1.1.0",
     "react": "^18",
     "react-dom": "^18",
+    "react-i18next": "^14.1.0",
     "react-konva": "^18.2.10",
     "tailwind-merge": "^2.3.0",
     "use-image": "^1.1.1"
@@ -30,9 +35,11 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/sort-json": "^2",
     "eslint": "^8",
     "eslint-config-next": "14.2.2",
     "postcss": "^8",
+    "sort-json": "^2.0.1",
     "tailwindcss": "^3.4.1",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5"
