@@ -9,11 +9,10 @@ import type { Vector2d } from "konva/lib/types";
 import type { Map as MapType } from "@/constants/map";
 import type { Stage as StageType } from "konva/lib/Stage";
 
-const Map = ({ map }: { map: MapType }) => {
+const MapStage = ({ map }: { map: MapType }) => {
     const [mapImage] = useImage(MAP_CONFING[map].image);
 
     const [stageScale, setStageScale] = useState<Vector2d>({ x: 1, y: 1 });
-
     const [stageWidth, setStageWidth] = useState<number>(window.innerWidth);
     const [stageHeight, setStageHeight] = useState<number>(window.innerHeight);
     const [stagePosition, setStagePosition] = useState<Vector2d>({ x: 0, y: 0 });
@@ -147,4 +146,4 @@ const Map = ({ map }: { map: MapType }) => {
     );
 };
 
-export default Map;
+export default MapStage;
