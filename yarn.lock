@@ -3089,16 +3089,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-themes@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "next-themes@npm:0.3.0"
-  peerDependencies:
-    react: ^16.8 || ^17 || ^18
-    react-dom: ^16.8 || ^17 || ^18
-  checksum: 10c0/72bd670ad6b9f547dc18cece340dfd1ac41e3e7b37eb321d4767db90bfa2c239f937011cd0efe35ca0081f1ea260051bc0868808ef39b0fbff2ddefd7146cec6
-  languageName: node
-  linkType: hard
-
 "next@npm:14.2.2":
   version: 14.2.2
   resolution: "next@npm:14.2.2"
@@ -4262,7 +4252,6 @@ __metadata:
     eslint-config-next: "npm:14.2.2"
     konva: "npm:^9.3.6"
     next: "npm:14.2.2"
-    next-themes: "npm:^0.3.0"
     postcss: "npm:^8"
     react: "npm:^18"
     react-dom: "npm:^18"

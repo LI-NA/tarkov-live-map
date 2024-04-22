@@ -1,7 +1,8 @@
-"use client";
-
 import { useState, useEffect, useRef, useCallback } from "react";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
+
+import { MAPS } from "@/constants/map";
 
 import {
     AlertDialog,
@@ -14,19 +15,28 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
+import type { GetStaticPaths, GetStaticProps } from "next";
+import type { Map } from "@/constants/map";
+
+export const getStaticPaths = (async () => {
+    return {
+        paths: MAPS.map(map => ({ params: { map } })),
+        fallback: false,
+    };
+}) satisfies GetStaticPaths;
+
+export const getStaticProps = (async () => {
+    return { props: {} };
+}) satisfies GetStaticProps;
+
 const MapStage = dynamic(() => import("@/components/map-stage"), {
     ssr: false,
 });
 
-import type { Map } from "@/constants/map";
+export default function MapIndex() {
+    const router = useRouter();
+    const map = router.query.map as Map;
 
-export default function Home({
-    params: { map },
-}: {
-    params: {
-        map: Map;
-    };
-}) {
     const [initDialogOpen, setInitDialogOpen] = useState(false);
 
     const onClickInitDialogAction = useCallback(() => {}, []);
