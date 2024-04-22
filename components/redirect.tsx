@@ -5,7 +5,7 @@ import type { FC } from "react";
 
 export const useRedirect = (to?: string) => {
     const router = useRouter();
-    to = to || router.asPath;
+    to = to ?? router.asPath;
 
     // language detection
     useEffect(() => {
@@ -14,14 +14,14 @@ export const useRedirect = (to?: string) => {
         if (detectedLng) {
             if (to.startsWith("/" + detectedLng) && router.route === "/404") {
                 // prevent endless loop
-                router.replace("/" + detectedLng + router.route);
+                router.replace("/" + detectedLng + router.route).catch(console.error);
                 return;
             }
 
             if (languageDetector.cache) {
                 languageDetector.cache(detectedLng);
             }
-            router.replace("/" + detectedLng + to);
+            router.replace("/" + detectedLng + to).catch(console.error);
         }
     }, [to, router]);
 

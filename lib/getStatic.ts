@@ -16,7 +16,7 @@ export const getI18nPaths = (): I18nPath[] =>
         },
     }));
 
-export const mergeI18nPaths = (paths: Array<{ params: Record<string, string> }>) => {
+export const mergeI18nPaths = (paths: { params: Record<string, string> }[]) => {
     const locales = getI18nPaths();
 
     return locales.flatMap(localePath =>
@@ -29,7 +29,7 @@ export const mergeI18nPaths = (paths: Array<{ params: Record<string, string> }>)
     );
 };
 
-export const getStaticPaths = (async () => {
+export const getStaticPaths = (() => {
     return {
         paths: getI18nPaths(),
         fallback: false,
@@ -38,7 +38,7 @@ export const getStaticPaths = (async () => {
 
 export async function getI18nProps(ctx: GetStaticPropsContext, ns: string[] = ["common"]) {
     const locale = ctx?.params?.locale as string;
-    let props = {
+    const props = {
         ...(await serverSideTranslations(locale, ns)),
     };
     return props;

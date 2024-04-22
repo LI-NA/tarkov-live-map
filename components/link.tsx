@@ -13,7 +13,7 @@ const LinkComponent: FC<ComponentProps<typeof Link>> = ({ children, href, ...res
 
     if (locale) {
         if (typeof href === "string") {
-            if (href.indexOf("http") !== 0) {
+            if (!href.startsWith("http")) {
                 hrefWithLocale = hrefWithLocale ? `/${locale}${href}` : router.pathname.replace("[locale]", locale);
             }
         } else {

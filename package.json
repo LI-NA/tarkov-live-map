@@ -36,13 +36,15 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/sort-json": "^2",
+    "@typescript-eslint/eslint-plugin": "^7.7.0",
+    "@typescript-eslint/parser": "^7.7.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.2",
     "postcss": "^8",
     "sort-json": "^2.0.1",
     "tailwindcss": "^3.4.1",
     "tailwindcss-animate": "^1.0.7",
-    "typescript": "^5"
+    "typescript": "^5.4.5"
   },
   "packageManager": "yarn@4.1.1"
 }

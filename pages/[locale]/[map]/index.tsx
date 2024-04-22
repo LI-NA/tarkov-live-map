@@ -22,7 +22,7 @@ import { getQueryWithoutUndefined } from "@/lib/query";
 import type { GetStaticPaths } from "next";
 import type { Map } from "@/constants/map";
 
-export const getStaticPaths = (async () => {
+export const getStaticPaths = (() => {
     const mapPaths = MAPS.map(map => ({ params: { map } }));
     const paths = mergeI18nPaths(mapPaths);
 
@@ -46,7 +46,9 @@ export default function MapIndex() {
 
     const [initDialogOpen, setInitDialogOpen] = useState(false);
 
-    const onClickInitDialogAction = useCallback(() => {}, []);
+    const onClickInitDialogAction = useCallback(() => {
+        // Do something
+    }, []);
 
     const onClickInitDialogClose = useCallback(() => {
         setInitDialogOpen(false);
