@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
@@ -19,9 +19,10 @@ import { useToast } from "@/components/ui/use-toast";
 
 import { mergeI18nPaths, makeStaticProps } from "@/lib/getStatic";
 import { getQueryWithoutUndefined } from "@/lib/query";
+import { screenshotToVector3d } from "@/lib/tarkov";
 
 import type { GetStaticPaths } from "next";
-import type { Map } from "@/constants/map";
+import type { Map, Vector3d } from "@/constants/map";
 
 export const getStaticPaths = (() => {
     const mapPaths = MAPS.map(map => ({ params: { map } }));
@@ -48,8 +49,10 @@ export default function MapIndex() {
 
     const [initDialogOpen, setInitDialogOpen] = useState(false);
     const [directoryStatus, setDirectoryStatus] = useState(false);
+    const [screenshots, setScreenshots] = useState<string[]>([]);
 
     const directoryHandleRef = useRef<FileSystemDirectoryHandle | null>(null);
+    const directoryScanIntervalRef = useRef<number | null>(null);
 
     const onClickInitDialogAction = useCallback(async () => {
         try {
@@ -88,15 +91,66 @@ export default function MapIndex() {
         setInitDialogOpen(false);
     }, []);
 
+    const scanDirectory = useCallback(async () => {
+        if (!directoryHandleRef.current) {
+            return;
+        }
+
+        const dirHandle = directoryHandleRef.current;
+        const files: string[] = [];
+
+        try {
+            for await (const handle of dirHandle.values()) {
+                if (handle.kind === "file") {
+                    files.push(handle.name);
+                    await dirHandle.removeEntry(handle.name);
+                }
+            }
+
+            // Add file without duplicates
+            setScreenshots(oldFiles => {
+                const newFiles = files.filter(file => !oldFiles.includes(file));
+
+                if (newFiles.length === 0) {
+                    return oldFiles;
+                }
+
+                return [...newFiles, ...oldFiles];
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }, []);
+
+    const screenshotVectors = useMemo(() => {
+        return screenshots.map(screenshotToVector3d).filter((vector): vector is Vector3d => vector !== null);
+    }, [screenshots]);
+
     useEffect(() => {
         if (typeof window !== "undefined") {
             setInitDialogOpen(true);
         }
     }, []);
 
+    useEffect(() => {
+        if (directoryStatus) {
+            directoryScanIntervalRef.current = window.setInterval(scanDirectory, 1000);
+        } else {
+            if (directoryScanIntervalRef.current) {
+                window.clearInterval(directoryScanIntervalRef.current);
+            }
+        }
+
+        return () => {
+            if (directoryScanIntervalRef.current) {
+                window.clearInterval(directoryScanIntervalRef.current);
+            }
+        };
+    }, [directoryStatus, scanDirectory]);
+
     return (
         <>
-            <MapStage map={map} />
+            <MapStage map={map} myPositions={screenshotVectors} />
             <AlertDialog open={initDialogOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>

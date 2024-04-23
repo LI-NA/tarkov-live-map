@@ -1,15 +1,17 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import { Stage, Layer, Image } from "react-konva";
+import { useState, useEffect, useCallback, useRef, useMemo, Fragment } from "react";
+import { Circle, Stage, Layer, Image } from "react-konva";
 import useImage from "use-image";
 
 import { MAP_CONFING } from "@/constants/map";
 
+import { vector3dToVector2dList } from "@/lib/tarkov";
+
 import type { KonvaEventObject } from "konva/lib/Node";
 import type { Vector2d } from "konva/lib/types";
-import type { Map as MapType } from "@/constants/map";
+import type { Map as MapType, Vector3d } from "@/constants/map";
 import type { Stage as StageType } from "konva/lib/Stage";
 
-const MapStage = ({ map }: { map: MapType }) => {
+const MapStage = ({ map, myPositions }: { map: MapType; myPositions: Vector3d[] }) => {
     const [mapImage] = useImage(MAP_CONFING[map].image);
 
     const [stageScale, setStageScale] = useState<Vector2d>({ x: 1, y: 1 });
@@ -127,6 +129,14 @@ const MapStage = ({ map }: { map: MapType }) => {
         [mapImage]
     );
 
+    const myMapPositions = useMemo(() => {
+        return myPositions
+            .map(position => vector3dToVector2dList(map, position))
+            .filter(vectors => vectors.length !== 0);
+    }, [map, myPositions]);
+
+    console.log(myMapPositions[0]);
+
     return (
         <Stage
             width={stageWidth}
@@ -137,11 +147,31 @@ const MapStage = ({ map }: { map: MapType }) => {
             draggable
             onDragMove={onDragMove}
             onWheel={onWheelEvent}
+            onMouseDown={() => {
+                console.log(stageRef.current?.getRelativePointerPosition());
+            }}
             ref={stageRef}
         >
             <Layer>
                 {/* eslint-disable-next-line jsx-a11y/alt-text */}
                 <Image image={mapImage} />
+            </Layer>
+            <Layer>
+                {myMapPositions.map((positions, index) => (
+                    <Fragment key={`my-positions-${positions[0].id}-${positions[0].x}-${positions[0].y}-${index}`}>
+                        {positions.map(position => (
+                            <Circle
+                                key={`my-${position.id}-${position.x}-${position.y}-${index}`}
+                                x={position.x}
+                                y={position.y}
+                                radius={5 / stageScale.x}
+                                // fill will be transparent by 10%
+                                fill={`rgba(255, 0, 0, ${Math.max(0, 1 - index * 0.1)})`}
+                                shadowBlur={10}
+                            />
+                        ))}
+                    </Fragment>
+                ))}
             </Layer>
         </Stage>
     );
