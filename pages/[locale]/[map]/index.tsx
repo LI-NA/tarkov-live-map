@@ -22,7 +22,7 @@ import { getQueryWithoutUndefined } from "@/lib/query";
 import { screenshotToVector3d } from "@/lib/tarkov";
 
 import type { GetStaticPaths } from "next";
-import type { Map, Vector3d } from "@/constants/map";
+import type { Map, ScreenshotVector3d } from "@/constants/map";
 
 export const getStaticPaths = (() => {
     const mapPaths = MAPS.map(map => ({ params: { map } }));
@@ -49,8 +49,9 @@ export default function MapIndex() {
 
     const [initDialogOpen, setInitDialogOpen] = useState(false);
     const [directoryStatus, setDirectoryStatus] = useState(false);
-    const [screenshots, setScreenshots] = useState<string[]>([]);
+    const [screenshotVectors, setScreenshotVectors] = useState<ScreenshotVector3d[]>([]);
 
+    const ignoreFilesRef = useRef<Set<string>>(new Set<string>());
     const directoryHandleRef = useRef<FileSystemDirectoryHandle | null>(null);
     const directoryScanIntervalRef = useRef<number | null>(null);
 
@@ -65,6 +66,13 @@ export default function MapIndex() {
                 (await dirHandle.requestPermission({ mode: "readwrite" })) === "granted"
             ) {
                 // Read and write access has been granted.
+
+                for await (const handle of dirHandle.values()) {
+                    if (handle.kind === "file") {
+                        ignoreFilesRef.current.add(handle.name);
+                    }
+                }
+
                 directoryHandleRef.current = dirHandle;
                 setDirectoryStatus(true);
                 setInitDialogOpen(false);
@@ -97,34 +105,37 @@ export default function MapIndex() {
         }
 
         const dirHandle = directoryHandleRef.current;
-        const files: string[] = [];
+        const files: ScreenshotVector3d[] = [];
 
         try {
             for await (const handle of dirHandle.values()) {
-                if (handle.kind === "file") {
-                    files.push(handle.name);
-                    await dirHandle.removeEntry(handle.name);
+                if (handle.kind === "file" && !ignoreFilesRef.current.has(handle.name)) {
+                    const vector = screenshotToVector3d(handle.name);
+
+                    if (vector) {
+                        files.push({
+                            ...vector,
+                            name: handle.name,
+                        });
+                        console.log({
+                            ...vector,
+                            name: handle.name,
+                        });
+                        await dirHandle.removeEntry(handle.name);
+                        // ignoreFilesRef.current.add(handle.name);
+                    } else {
+                        ignoreFilesRef.current.add(handle.name);
+                    }
                 }
             }
 
-            // Add file without duplicates
-            setScreenshots(oldFiles => {
-                const newFiles = files.filter(file => !oldFiles.includes(file));
-
-                if (newFiles.length === 0) {
-                    return oldFiles;
-                }
-
-                return [...newFiles, ...oldFiles];
-            });
+            if (files.length > 0) {
+                setScreenshotVectors(oldScreenshots => [...files, ...oldScreenshots]);
+            }
         } catch (error) {
             console.error(error);
         }
     }, []);
-
-    const screenshotVectors = useMemo(() => {
-        return screenshots.map(screenshotToVector3d).filter((vector): vector is Vector3d => vector !== null);
-    }, [screenshots]);
 
     useEffect(() => {
         if (typeof window !== "undefined") {

@@ -17,7 +17,6 @@ const MapStage = ({ map, myPositions }: { map: MapType; myPositions: Vector3d[] 
     const [stageScale, setStageScale] = useState<Vector2d>({ x: 1, y: 1 });
     const [stageWidth, setStageWidth] = useState<number>(window.innerWidth);
     const [stageHeight, setStageHeight] = useState<number>(window.innerHeight);
-    const [stagePosition, setStagePosition] = useState<Vector2d>({ x: 0, y: 0 });
 
     const stageRef = useRef<StageType>(null);
 
@@ -78,7 +77,6 @@ const MapStage = ({ map, myPositions }: { map: MapType; myPositions: Vector3d[] 
         }
 
         stage.position(newStagePosition);
-        setStagePosition(newStagePosition);
     }, [mapImage]);
 
     const onDragMove = useCallback(
@@ -124,7 +122,7 @@ const MapStage = ({ map, myPositions }: { map: MapType; myPositions: Vector3d[] 
                 y: pointer.y - mousePointTo.y * newScale,
             };
 
-            setStagePosition(newPos);
+            stage.position(newPos);
         },
         [mapImage]
     );
@@ -142,8 +140,6 @@ const MapStage = ({ map, myPositions }: { map: MapType; myPositions: Vector3d[] 
             width={stageWidth}
             height={stageHeight}
             scale={stageScale}
-            x={stagePosition.x}
-            y={stagePosition.y}
             draggable
             onDragMove={onDragMove}
             onWheel={onWheelEvent}

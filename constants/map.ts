@@ -53,6 +53,10 @@ export interface Vector3d {
     z: number;
 }
 
+export interface ScreenshotVector3d extends Vector3d {
+    name: string;
+}
+
 export interface Vector2dWithId extends Vector2d {
     id: string;
 }
@@ -146,11 +150,19 @@ export const MAP_CONFING = {
         ],
     },
     [MAP.STREETS_OF_TARKOV]: {
-        enable: false,
+        enable: true,
         image: "/tarkov-live-map/images/maps/streets-of-tarkov.webp",
-        width: 0,
-        height: 0,
-        positions: [],
+        width: 7620,
+        height: 5877,
+        positions: [
+            {
+                id: "main",
+                imageFrom: { x: 2265, y: 338 },
+                imageTo: { x: 5850, y: 5324 },
+                gameFrom: { x: 315, y: -283, z: -1000 },
+                gameTo: { x: -268, y: 528, z: 1000 },
+            },
+        ],
     },
     [MAP.WOODS]: {
         enable: false,
