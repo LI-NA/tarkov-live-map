@@ -204,9 +204,9 @@ const MapStage = ({ map, myPositions }: { map: MapType; myPositions: ScreenshotV
                                 x={vector.x}
                                 y={vector.y}
                                 radius={5 / stageScale}
-                                // fill will be transparent by 10%
-                                fill={`rgba(255, 0, 0, ${Math.max(0, 1 - index * 0.1)})`}
+                                fill="red"
                                 stroke="black"
+                                opacity={1 - index * 0.1}
                                 shadowBlur={10}
                             />
                         ))}
