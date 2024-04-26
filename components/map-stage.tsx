@@ -7,14 +7,15 @@ import { MAP_CONFING } from "@/constants/map";
 import { vector3dToVector2dList } from "@/lib/tarkov";
 
 import type { KonvaEventObject } from "konva/lib/Node";
-import type { Vector2d } from "konva/lib/types";
 import type { Map as MapType, Vector3d } from "@/constants/map";
 import type { Stage as StageType } from "konva/lib/Stage";
+
+const MIN_SCALE = 0.05;
 
 const MapStage = ({ map, myPositions }: { map: MapType; myPositions: Vector3d[] }) => {
     const [mapImage] = useImage(MAP_CONFING[map].image);
 
-    const [stageScale, setStageScale] = useState<Vector2d>({ x: 1, y: 1 });
+    const [stageScale, setStageScale] = useState<number>(1);
     const [stageWidth, setStageWidth] = useState<number>(window.innerWidth);
     const [stageHeight, setStageHeight] = useState<number>(window.innerHeight);
 
@@ -34,13 +35,12 @@ const MapStage = ({ map, myPositions }: { map: MapType; myPositions: Vector3d[] 
     });
 
     useEffect(() => {
-        if (mapImage) {
-            const scale = Math.max(window.innerWidth / mapImage.width, 0.1);
+        if (mapImage && stageRef.current) {
+            const scale = Math.max(window.innerWidth / mapImage.width, MIN_SCALE);
 
-            setStageScale({
-                x: scale,
-                y: scale,
-            });
+            setStageScale(scale);
+
+            stageRef.current.scale({ x: scale, y: scale });
         }
     }, [mapImage]);
 
@@ -97,7 +97,10 @@ const MapStage = ({ map, myPositions }: { map: MapType; myPositions: Vector3d[] 
             }
 
             const stage = stageRef.current;
-            const minScale = Math.max(window.innerWidth / mapImage.width, 0.1);
+            const minScale = Math.max(
+                Math.min(window.innerWidth / mapImage.width, window.innerHeight / mapImage.height),
+                MIN_SCALE
+            );
             const pointer = stage.getPointerPosition();
             const scale = stage.scaleX();
 
@@ -115,14 +118,15 @@ const MapStage = ({ map, myPositions }: { map: MapType; myPositions: Vector3d[] 
 
             const newScale = Math.min(Math.max(direction > 0 ? scale * 1.1 : scale / 1.1, minScale), 1);
 
-            setStageScale({ x: newScale, y: newScale });
-
             const newPos = {
                 x: pointer.x - mousePointTo.x * newScale,
                 y: pointer.y - mousePointTo.y * newScale,
             };
 
             stage.position(newPos);
+            stage.scale({ x: newScale, y: newScale });
+
+            setStageScale(newScale);
         },
         [mapImage]
     );
@@ -139,7 +143,6 @@ const MapStage = ({ map, myPositions }: { map: MapType; myPositions: Vector3d[] 
         <Stage
             width={stageWidth}
             height={stageHeight}
-            scale={stageScale}
             draggable
             onDragMove={onDragMove}
             onWheel={onWheelEvent}
@@ -160,7 +163,7 @@ const MapStage = ({ map, myPositions }: { map: MapType; myPositions: Vector3d[] 
                                 key={`my-${position.id}-${position.x}-${position.y}-${index}`}
                                 x={position.x}
                                 y={position.y}
-                                radius={5 / stageScale.x}
+                                radius={5 / stageScale}
                                 // fill will be transparent by 10%
                                 fill={`rgba(255, 0, 0, ${Math.max(0, 1 - index * 0.1)})`}
                                 shadowBlur={10}
