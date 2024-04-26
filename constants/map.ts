@@ -93,11 +93,19 @@ export const MAP_CONFING = {
         positions: [],
     },
     [MAP.GROUND_ZERO]: {
-        enable: false,
+        enable: true,
         image: "/tarkov-live-map/images/maps/ground-zero.webp",
-        width: 0,
-        height: 0,
-        positions: [],
+        width: 6920,
+        height: 6920,
+        positions: [
+            {
+                id: "main",
+                imageFrom: { x: 950, y: 650 },
+                imageTo: { x: 4190, y: 5495 },
+                gameFrom: { x: 235, y: -106, z: -1000 },
+                gameTo: { x: -63, y: 341, z: 1000 },
+            },
+        ],
     },
     [MAP.INTERCHANGE]: {
         enable: false,

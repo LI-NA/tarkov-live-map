@@ -14,6 +14,7 @@ import type { Circle as CircleType } from "konva/lib/shapes/Circle";
 import type { Map as MapType, ScreenshotVector3d } from "@/constants/map";
 
 const MIN_SCALE = 0.05;
+const MAX_CIRCLE = 10;
 
 const MapStage = ({ map, myPositions }: { map: MapType; myPositions: ScreenshotVector3d[] }) => {
     const [mapImage] = useImage(MAP_CONFING[map].image);
@@ -177,8 +178,6 @@ const MapStage = ({ map, myPositions }: { map: MapType; myPositions: ScreenshotV
         return mapPositions;
     }, [map, myPositions]);
 
-    console.log(myMapPositions[0]);
-
     return (
         <Stage
             width={stageWidth}
@@ -196,7 +195,7 @@ const MapStage = ({ map, myPositions }: { map: MapType; myPositions: ScreenshotV
                 <Image image={mapImage} />
             </Layer>
             <Layer>
-                {myMapPositions.map((position, index) => (
+                {myMapPositions.slice(0, MAX_CIRCLE).map((position, index) => (
                     <Fragment key={`my-positions-${position.name}`}>
                         {position.vectors.map(vector => (
                             <Circle
@@ -206,7 +205,7 @@ const MapStage = ({ map, myPositions }: { map: MapType; myPositions: ScreenshotV
                                 radius={5 / stageScale}
                                 fill="red"
                                 stroke="black"
-                                opacity={1 - index * 0.1}
+                                opacity={1 - index * (1 / MAX_CIRCLE)}
                                 shadowBlur={10}
                             />
                         ))}
