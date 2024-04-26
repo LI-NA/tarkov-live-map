@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef, useMemo, Fragment } from "react";
+import { Animation } from "konva/lib/Animation";
 import { Circle, Stage, Layer, Image } from "react-konva";
 import useImage from "use-image";
 
@@ -7,12 +8,14 @@ import { MAP_CONFING } from "@/constants/map";
 import { vector3dToVector2dList } from "@/lib/tarkov";
 
 import type { KonvaEventObject } from "konva/lib/Node";
-import type { Map as MapType, Vector3d } from "@/constants/map";
 import type { Stage as StageType } from "konva/lib/Stage";
+import type { Layer as LayerType } from "konva/lib/Layer";
+import type { Circle as CircleType } from "konva/lib/shapes/Circle";
+import type { Map as MapType, ScreenshotVector3d } from "@/constants/map";
 
 const MIN_SCALE = 0.05;
 
-const MapStage = ({ map, myPositions }: { map: MapType; myPositions: Vector3d[] }) => {
+const MapStage = ({ map, myPositions }: { map: MapType; myPositions: ScreenshotVector3d[] }) => {
     const [mapImage] = useImage(MAP_CONFING[map].image);
 
     const [stageScale, setStageScale] = useState<number>(1);
@@ -20,6 +23,9 @@ const MapStage = ({ map, myPositions }: { map: MapType; myPositions: Vector3d[] 
     const [stageHeight, setStageHeight] = useState<number>(window.innerHeight);
 
     const stageRef = useRef<StageType>(null);
+    const animationRef = useRef<Animation | null>(null);
+    const animationLayerRef = useRef<LayerType>(null);
+    const animationCircleRef = useRef<CircleType>(null);
 
     useEffect(() => {
         const handleResize = () => {
@@ -32,7 +38,36 @@ const MapStage = ({ map, myPositions }: { map: MapType; myPositions: Vector3d[] 
         return () => {
             window.removeEventListener("resize", handleResize);
         };
-    });
+    }, []);
+
+    useEffect(() => {
+        if (animationLayerRef.current && !animationRef.current) {
+            animationRef.current = new Animation(frame => {
+                if (!animationCircleRef.current || !frame) {
+                    return;
+                }
+
+                const x = (frame.time % 2000) / 2000;
+                const easeOutExpo = x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
+                const easeOutCubic = 1 - Math.pow(1 - x, 3);
+                const scale = 1 + easeOutExpo * 3;
+                const opacity = 1 - easeOutCubic;
+
+                animationCircleRef.current.scale({ x: scale, y: scale });
+                animationCircleRef.current.opacity(opacity);
+            }, animationLayerRef.current);
+        }
+
+        if (animationRef.current) {
+            animationRef.current.start();
+        }
+
+        return () => {
+            if (animationRef.current) {
+                animationRef.current.stop();
+            }
+        };
+    }, []);
 
     useEffect(() => {
         if (mapImage && stageRef.current) {
@@ -132,9 +167,14 @@ const MapStage = ({ map, myPositions }: { map: MapType; myPositions: Vector3d[] 
     );
 
     const myMapPositions = useMemo(() => {
-        return myPositions
-            .map(position => vector3dToVector2dList(map, position))
-            .filter(vectors => vectors.length !== 0);
+        const mapPositions = myPositions
+            .map(position => ({
+                name: position.name,
+                vectors: vector3dToVector2dList(map, position),
+            }))
+            .filter(({ vectors }) => vectors.length !== 0);
+
+        return mapPositions;
     }, [map, myPositions]);
 
     console.log(myMapPositions[0]);
@@ -156,21 +196,37 @@ const MapStage = ({ map, myPositions }: { map: MapType; myPositions: Vector3d[] 
                 <Image image={mapImage} />
             </Layer>
             <Layer>
-                {myMapPositions.map((positions, index) => (
-                    <Fragment key={`my-positions-${positions[0].id}-${positions[0].x}-${positions[0].y}-${index}`}>
-                        {positions.map(position => (
+                {myMapPositions.map((position, index) => (
+                    <Fragment key={`my-positions-${position.name}`}>
+                        {position.vectors.map(vector => (
                             <Circle
-                                key={`my-${position.id}-${position.x}-${position.y}-${index}`}
-                                x={position.x}
-                                y={position.y}
+                                key={`my-${vector.id}-${vector.x}-${vector.y}-${index}`}
+                                x={vector.x}
+                                y={vector.y}
                                 radius={5 / stageScale}
                                 // fill will be transparent by 10%
                                 fill={`rgba(255, 0, 0, ${Math.max(0, 1 - index * 0.1)})`}
+                                stroke="black"
                                 shadowBlur={10}
                             />
                         ))}
                     </Fragment>
                 ))}
+            </Layer>
+            <Layer ref={animationLayerRef}>
+                {myMapPositions.length > 0 && (
+                    <Circle
+                        x={myMapPositions[0].vectors[0].x}
+                        y={myMapPositions[0].vectors[0].y}
+                        radius={5 / stageScale}
+                        fill="transparent"
+                        stroke="white"
+                        strokeWidth={0.5 / stageScale}
+                        shadowBlur={10}
+                        shadowColor="white"
+                        ref={animationCircleRef}
+                    />
+                )}
             </Layer>
         </Stage>
     );
