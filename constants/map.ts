@@ -158,7 +158,7 @@ export const MAP_CONFING = {
             {
                 id: "main",
                 imageFrom: { x: 2265, y: 338 },
-                imageTo: { x: 5850, y: 5324 },
+                imageTo: { x: 5840, y: 5334 },
                 gameFrom: { x: 315, y: -283, z: -1000 },
                 gameTo: { x: -268, y: 528, z: 1000 },
             },
