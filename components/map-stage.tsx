@@ -26,7 +26,7 @@ const MapStage = ({ map, myPositions }: { map: MapType; myPositions: ScreenshotV
     const stageRef = useRef<StageType>(null);
     const animationRef = useRef<Animation | null>(null);
     const animationLayerRef = useRef<LayerType>(null);
-    const animationCircleRef = useRef<CircleType>(null);
+    const animationCircleRef = useRef<Map<string, CircleType>>(new Map<string, CircleType>());
 
     useEffect(() => {
         const handleResize = () => {
@@ -44,7 +44,7 @@ const MapStage = ({ map, myPositions }: { map: MapType; myPositions: ScreenshotV
     useEffect(() => {
         if (animationLayerRef.current && !animationRef.current) {
             animationRef.current = new Animation(frame => {
-                if (!animationCircleRef.current || !frame) {
+                if (!animationCircleRef.current?.size || !frame) {
                     return;
                 }
 
@@ -54,8 +54,10 @@ const MapStage = ({ map, myPositions }: { map: MapType; myPositions: ScreenshotV
                 const scale = 1 + easeOutExpo * 3;
                 const opacity = 1 - easeOutCubic;
 
-                animationCircleRef.current.scale({ x: scale, y: scale });
-                animationCircleRef.current.opacity(opacity);
+                animationCircleRef.current.forEach(circle => {
+                    circle.scale({ x: scale, y: scale });
+                    circle.opacity(opacity);
+                });
             }, animationLayerRef.current);
         }
 
@@ -213,19 +215,27 @@ const MapStage = ({ map, myPositions }: { map: MapType; myPositions: ScreenshotV
                 ))}
             </Layer>
             <Layer ref={animationLayerRef}>
-                {myMapPositions.length > 0 && (
-                    <Circle
-                        x={myMapPositions[0].vectors[0].x}
-                        y={myMapPositions[0].vectors[0].y}
-                        radius={5 / stageScale}
-                        fill="transparent"
-                        stroke="white"
-                        strokeWidth={0.5 / stageScale}
-                        shadowBlur={10}
-                        shadowColor="white"
-                        ref={animationCircleRef}
-                    />
-                )}
+                {myMapPositions.length > 0 &&
+                    myMapPositions[0].vectors.map(vector => (
+                        <Circle
+                            key={`animation-${vector.id}`}
+                            x={vector.x}
+                            y={vector.y}
+                            radius={5 / stageScale}
+                            fill="transparent"
+                            stroke="white"
+                            strokeWidth={0.5 / stageScale}
+                            shadowBlur={10}
+                            shadowColor="white"
+                            ref={node => {
+                                if (node) {
+                                    animationCircleRef.current.set(`animation-${vector.id}`, node);
+                                } else {
+                                    animationCircleRef.current.delete(`animation-${vector.id}`);
+                                }
+                            }}
+                        />
+                    ))}
             </Layer>
         </Stage>
     );
