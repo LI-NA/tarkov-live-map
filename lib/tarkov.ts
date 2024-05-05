@@ -20,8 +20,13 @@ export const screenshotToVector3d = (screenshot: string): Vector3d | null => {
 /**
  * Check the Vector3d is in the range of Vector3d
  */
-export const isVector3dInRange = (from: Vector3d, to: Vector3d, vector: Vector3d): boolean => {
+export const isVector3dInRange = (position: MapPosition, vector: Vector3d): boolean => {
     // Make support both case from > to and to > from.
+    const { gameFrom: from, gameTo: to, gameReverse } = position;
+
+    const vectorX = gameReverse ? vector.y : vector.x;
+    const vectorY = gameReverse ? vector.x : vector.y;
+
     const minX = Math.min(from.x, to.x);
     const maxX = Math.max(from.x, to.x);
 
@@ -32,12 +37,7 @@ export const isVector3dInRange = (from: Vector3d, to: Vector3d, vector: Vector3d
     const maxZ = Math.max(from.z, to.z);
 
     return (
-        minX <= vector.x &&
-        vector.x <= maxX &&
-        minY <= vector.y &&
-        vector.y <= maxY &&
-        minZ <= vector.z &&
-        vector.z <= maxZ
+        minX <= vectorX && vectorX <= maxX && minY <= vectorY && vectorY <= maxY && minZ <= vector.z && vector.z <= maxZ
     );
 };
 
@@ -45,10 +45,13 @@ export const isVector3dInRange = (from: Vector3d, to: Vector3d, vector: Vector3d
  * Convert the game Vector3d to the Map Vector2d using the position
  */
 export const vector3dToVector2d = (position: MapPosition, vector: Vector3d): Vector2dWithId => {
-    const { id, gameFrom, gameTo, imageFrom, imageTo } = position;
+    const { id, gameFrom, gameTo, gameReverse, imageFrom, imageTo } = position;
 
-    const x = ((vector.x - gameFrom.x) / (gameTo.x - gameFrom.x)) * (imageTo.x - imageFrom.x) + imageFrom.x;
-    const y = ((vector.y - gameFrom.y) / (gameTo.y - gameFrom.y)) * (imageTo.y - imageFrom.y) + imageFrom.y;
+    const vectorX = gameReverse ? vector.y : vector.x;
+    const vectorY = gameReverse ? vector.x : vector.y;
+
+    const x = ((vectorX - gameFrom.x) / (gameTo.x - gameFrom.x)) * (imageTo.x - imageFrom.x) + imageFrom.x;
+    const y = ((vectorY - gameFrom.y) / (gameTo.y - gameFrom.y)) * (imageTo.y - imageFrom.y) + imageFrom.y;
 
     return { id, x, y };
 };
@@ -62,7 +65,7 @@ export const vector3dToVector2dList = (map: Map, vector: Vector3d): Vector2dWith
     console.log("mapPositions", mapPositions, vector.x, vector.y, vector.z);
 
     // Find the first position that the vector is in.
-    const matchedPositions = mapPositions.filter(({ gameFrom, gameTo }) => isVector3dInRange(gameFrom, gameTo, vector));
+    const matchedPositions = mapPositions.filter(position => isVector3dInRange(position, vector));
 
     console.log("matchedPositions", matchedPositions);
 

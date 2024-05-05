@@ -67,6 +67,7 @@ export interface MapPosition {
     imageTo: Vector2d;
     gameFrom: Vector3d;
     gameTo: Vector3d;
+    gameReverse: boolean;
 }
 
 export interface MapConfig {
@@ -86,11 +87,28 @@ export const MAP_CONFING = {
         positions: [],
     },
     [MAP.FACTORY]: {
-        enable: false,
+        enable: true,
         image: "/tarkov-live-map/images/maps/factory.webp",
-        width: 0,
-        height: 0,
-        positions: [],
+        width: 7680,
+        height: 4320,
+        positions: [
+            {
+                id: "main",
+                imageFrom: { x: 2350, y: 800 },
+                imageTo: { x: 5390, y: 3988 },
+                gameFrom: { x: 68, y: 74, z: -1000 },
+                gameTo: { x: -65, y: -65, z: 1000 },
+                gameReverse: true,
+            },
+            {
+                id: "underground",
+                imageFrom: { x: 4974, y: 800 },
+                imageTo: { x: 8014, y: 3988 },
+                gameFrom: { x: 68, y: 74, z: -1000 },
+                gameTo: { x: -65, y: -65, z: 0.5 },
+                gameReverse: true,
+            },
+        ],
     },
     [MAP.GROUND_ZERO]: {
         enable: true,
@@ -104,6 +122,7 @@ export const MAP_CONFING = {
                 imageTo: { x: 4190, y: 5495 },
                 gameFrom: { x: 235, y: -106, z: -1000 },
                 gameTo: { x: -63, y: 341, z: 1000 },
+                gameReverse: false,
             },
         ],
     },
@@ -142,6 +161,7 @@ export const MAP_CONFING = {
                 imageTo: { x: 3115, y: 2481 },
                 gameFrom: { x: 197, y: -265, z: -1000 },
                 gameTo: { x: -260, y: 206, z: 1000 },
+                gameReverse: false,
             },
             */
         ],
@@ -158,6 +178,7 @@ export const MAP_CONFING = {
                 imageTo: { x: 5350, y: 4423 },
                 gameFrom: { x: 490, y: -415, z: -1000 },
                 gameTo: { x: -1040, y: 580, z: 1000 },
+                gameReverse: false,
             },
             {
                 id: "admin_1st_floor",
@@ -165,6 +186,7 @@ export const MAP_CONFING = {
                 imageTo: { x: 4705, y: 581 },
                 gameFrom: { x: -229, y: -165, z: -3 },
                 gameTo: { x: -274, y: -129, z: 1.8 },
+                gameReverse: false,
             },
         ],
     },
@@ -180,6 +202,7 @@ export const MAP_CONFING = {
                 imageTo: { x: 5840, y: 5334 },
                 gameFrom: { x: 315, y: -283, z: -1000 },
                 gameTo: { x: -268, y: 528, z: 1000 },
+                gameReverse: false,
             },
         ],
     },
