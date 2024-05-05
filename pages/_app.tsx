@@ -19,7 +19,7 @@ const App = ({ Component, pageProps }: AppProps) => {
     return (
         <div className={pretendard.className}>
             <Head>
-                <title>✨{t("head.title")}✨</title>
+                <title>{`✨${t("head.title", "Tarkov Live Map")}✨`}</title>
                 <meta name="description" content={t("head.description")} />
             </Head>
             <Component {...pageProps} />
