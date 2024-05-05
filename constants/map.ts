@@ -131,9 +131,20 @@ export const MAP_CONFING = {
     [MAP.RESERVE]: {
         enable: false,
         image: "/tarkov-live-map/images/maps/reserve.webp",
-        width: 0,
-        height: 0,
-        positions: [],
+        width: 4701,
+        height: 2785,
+        positions: [
+            /*
+            TODO: Reserve map is rotated around 15.3 degrees, so need to change the position system
+            {
+                id: "main",
+                imageFrom: { x: 380, y: 350 },
+                imageTo: { x: 3115, y: 2481 },
+                gameFrom: { x: 197, y: -265, z: -1000 },
+                gameTo: { x: -260, y: 206, z: 1000 },
+            },
+            */
+        ],
     },
     [MAP.SHORELINE]: {
         enable: true,
