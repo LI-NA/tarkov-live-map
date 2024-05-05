@@ -138,7 +138,7 @@ export default function MapIndex() {
     }, []);
 
     useEffect(() => {
-        if (typeof window !== "undefined") {
+        if (typeof window !== "undefined" && !directoryHandleRef.current) {
             setInitDialogOpen(true);
         }
     }, []);
