@@ -4,6 +4,8 @@
   "main.description": "Escape From Tarkov에서 각 지역의 지도를 확인하고 현재 위치를 표시하며, 이를 친구와 공유할 수 있는 프로젝트 입니다.",
   "main.selectMap": "아래에서 맵을 선택해주세요.",
   "main.welcome": "타르코프 라이브 지도에 오신 것을 환영합니다!",
+  "main.disclaimer": "면책조항",
+  "main.disclaimer.description": "Escape from Tarkov의 이름, 로고, 콘텐츠를 포함한 모든 권리는 Battlestate Games에 있습니다. 이 사이트는 Battlestate Games와 어떠한 방식으로도 관련이 없으며, 공식적인 승인이나 후원을 받은 것이 아닙니다.",
   "map.title": "지도",
   "map.title_customs": "커스텀",
   "map.title_factory": "팩토리",

@@ -21,21 +21,30 @@ export default function Index() {
                     <CardTitle>{t("main.welcome")}</CardTitle>
                     <CardDescription>{t("main.description")}</CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="flex flex-col gap-4">
                     <p>{t("main.selectMap")}</p>
+                    <section className="flex flex-col gap-2">
+                        {MAPS.map(map => (
+                            <Link key={map} href={`/${map}`} passHref legacyBehavior>
+                                <Button
+                                    className="w-full"
+                                    variant="outline"
+                                    size="lg"
+                                    disabled={!MAP_CONFING[map].enable}
+                                >
+                                    {t("map.title", {
+                                        context: map,
+                                    })}{" "}
+                                    {MAP_CONFING[map].enable ? "" : "(Coming soon)"}
+                                </Button>
+                            </Link>
+                        ))}
+                    </section>
+                    <section className="flex flex-col gap-1">
+                        <p className="text-sm">{t("main.disclaimer")}</p>
+                        <p className="text-sm text-muted-foreground">{t("main.disclaimer.description")}</p>
+                    </section>
                 </CardContent>
-                <CardFooter className="flex flex-col gap-2">
-                    {MAPS.map(map => (
-                        <Link key={map} href={`/${map}`} passHref legacyBehavior>
-                            <Button className="w-full" variant="outline" size="lg" disabled={!MAP_CONFING[map].enable}>
-                                {t("map.title", {
-                                    context: map,
-                                })}{" "}
-                                {MAP_CONFING[map].enable ? "" : "(Coming soon)"}
-                            </Button>
-                        </Link>
-                    ))}
-                </CardFooter>
             </Card>
         </div>
     );

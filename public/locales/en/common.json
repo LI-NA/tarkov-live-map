@@ -4,6 +4,8 @@
   "main.description": "A project that allows the user to view a map in the game Escape From Tarkov and show the current location and share it with friends.",
   "main.selectMap": "Please select your map.",
   "main.welcome": "Welcome to tarkov live map!",
+  "main.disclaimer": "Disclaimer",
+  "main.disclaimer.description": "All rights to Escape from Tarkov, including but not limited to its name, logo, and content, are the sole property of Battlestate Games. This site is not affiliated with, endorsed, or sponsored by Battlestate Games.",
   "map.title": "Map",
   "map.title_customs": "Customs",
   "map.title_factory": "Factory",
