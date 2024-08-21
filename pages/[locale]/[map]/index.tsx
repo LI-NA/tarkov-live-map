@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 
 import { MAPS } from "@/constants/map";
+import { DEFAULT_SETTINGS } from "@/constants/settings";
 
 import {
     AlertDialog,
@@ -16,6 +17,7 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/components/ui/use-toast";
+import MapMenu from "@/components/map-menu";
 
 import { mergeI18nPaths, makeStaticProps } from "@/lib/getStatic";
 import { getQueryWithoutUndefined } from "@/lib/query";
@@ -23,6 +25,7 @@ import { screenshotToVector3d } from "@/lib/tarkov";
 
 import type { GetStaticPaths } from "next";
 import type { Map, ScreenshotVector3d } from "@/constants/map";
+import type { Settings } from "@/constants/settings";
 
 export const getStaticPaths = (() => {
     const mapPaths = MAPS.map(map => ({ params: { map } }));
@@ -50,10 +53,12 @@ export default function MapIndex() {
     const [initDialogOpen, setInitDialogOpen] = useState(false);
     const [directoryStatus, setDirectoryStatus] = useState(false);
     const [screenshotVectors, setScreenshotVectors] = useState<ScreenshotVector3d[]>([]);
+    const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
 
     const ignoreFilesRef = useRef<Set<string>>(new Set<string>());
     const directoryHandleRef = useRef<FileSystemDirectoryHandle | null>(null);
     const directoryScanIntervalRef = useRef<number | null>(null);
+    const settingsRef = useRef<Settings>(settings);
 
     const onClickInitDialogAction = useCallback(async () => {
         try {
@@ -121,8 +126,12 @@ export default function MapIndex() {
                             ...vector,
                             name: handle.name,
                         });
-                        await dirHandle.removeEntry(handle.name);
-                        // ignoreFilesRef.current.add(handle.name);
+
+                        if (settingsRef.current.screenshotAutoDelete) {
+                            await dirHandle.removeEntry(handle.name);
+                        } else {
+                            ignoreFilesRef.current.add(handle.name);
+                        }
                     } else {
                         ignoreFilesRef.current.add(handle.name);
                     }
@@ -137,9 +146,26 @@ export default function MapIndex() {
         }
     }, []);
 
+    const saveSettings = useCallback((newSettings: Settings) => {
+        setSettings(newSettings);
+        settingsRef.current = newSettings;
+        localStorage.setItem("settings", JSON.stringify(newSettings));
+    }, []);
+
     useEffect(() => {
-        if (typeof window !== "undefined" && !directoryHandleRef.current) {
-            setInitDialogOpen(true);
+        if (typeof window !== "undefined") {
+            if (!directoryHandleRef.current) {
+                setInitDialogOpen(true);
+            }
+
+            // Load settings from localStorage
+            const localStorageSettings = localStorage.getItem("settings");
+
+            if (localStorageSettings) {
+                const parsedSettings = JSON.parse(localStorageSettings) as Settings;
+                setSettings(parsedSettings);
+                settingsRef.current = parsedSettings;
+            }
         }
     }, []);
 
@@ -159,9 +185,16 @@ export default function MapIndex() {
         };
     }, [directoryStatus, scanDirectory]);
 
+    useEffect(() => {
+        setScreenshotVectors([]);
+    }, [map]);
+
     return (
         <>
-            <MapStage map={map} myPositions={screenshotVectors} />
+            <div className="fixed top-0 left-0 z-10">
+                <MapMenu map={map} settings={settings} saveSettings={saveSettings} />
+            </div>
+            <MapStage map={map} myPositions={screenshotVectors} settings={settings} />
             <AlertDialog open={initDialogOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>

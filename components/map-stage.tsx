@@ -12,11 +12,20 @@ import type { Stage as StageType } from "konva/lib/Stage";
 import type { Layer as LayerType } from "konva/lib/Layer";
 import type { Circle as CircleType } from "konva/lib/shapes/Circle";
 import type { Map as MapType, ScreenshotVector3d } from "@/constants/map";
+import type { Settings } from "@/constants/settings";
 
 const MIN_SCALE = 0.05;
 const MAX_CIRCLE = 10;
 
-const MapStage = ({ map, myPositions }: { map: MapType; myPositions: ScreenshotVector3d[] }) => {
+const MapStage = ({
+    map,
+    myPositions,
+    settings,
+}: {
+    map: MapType;
+    myPositions: ScreenshotVector3d[];
+    settings: Settings;
+}) => {
     const [mapImage] = useImage(MAP_CONFING[map].image);
 
     const [stageScale, setStageScale] = useState<number>(1);
@@ -204,8 +213,8 @@ const MapStage = ({ map, myPositions }: { map: MapType; myPositions: ScreenshotV
                                 key={`my-${vector.id}-${vector.x}-${vector.y}-${index}`}
                                 x={vector.x}
                                 y={vector.y}
-                                radius={5 / stageScale}
-                                fill="red"
+                                radius={settings.markerSize / stageScale}
+                                fill={settings.markerColor}
                                 stroke="black"
                                 opacity={1 - index * (1 / MAX_CIRCLE)}
                                 shadowBlur={10}
@@ -215,7 +224,8 @@ const MapStage = ({ map, myPositions }: { map: MapType; myPositions: ScreenshotV
                 ))}
             </Layer>
             <Layer ref={animationLayerRef}>
-                {myMapPositions.length > 0 &&
+                {settings.markerAnimation &&
+                    myMapPositions.length > 0 &&
                     myMapPositions[0].vectors.map(vector => (
                         <Circle
                             key={`animation-${vector.id}`}
