@@ -207,10 +207,19 @@ export const MAP_CONFING = {
         ],
     },
     [MAP.WOODS]: {
-        enable: false,
+        enable: true,
         image: "/tarkov-live-map/images/maps/woods.webp",
         width: 0,
         height: 0,
-        positions: [],
+        positions: [
+            {
+                id: "main",
+                imageFrom: { x: 185, y: 274 },
+                imageTo: { x: 6390, y: 6640 },
+                gameFrom: { x: 637, y: -895, z: -1000 },
+                gameTo: { x: -651 , y: 442, z: 1000 },
+                gameReverse: false,
+            },
+        ],
     },
 } satisfies Record<Map, MapConfig>;
