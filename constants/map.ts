@@ -209,8 +209,8 @@ export const MAP_CONFING = {
     [MAP.WOODS]: {
         enable: true,
         image: "/tarkov-live-map/images/maps/woods.webp",
-        width: 0,
-        height: 0,
+        width: 6994,
+        height: 6843,
         positions: [
             {
                 id: "main",
