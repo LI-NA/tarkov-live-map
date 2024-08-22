@@ -23,10 +23,12 @@ const MapMenu = ({
     map,
     settings,
     saveSettings,
+    changeDirectory,
 }: {
     map: MapType;
     settings: Settings;
     saveSettings: (settings: Settings) => void;
+    changeDirectory: () => void;
 }) => {
     const { t } = useTranslation("common");
 
@@ -97,7 +99,7 @@ const MapMenu = ({
                     </MenubarGroup>
                     <MenubarGroup>
                         <MenubarLabel>{t("map.menu.settings.screenshot")}</MenubarLabel>
-                        <MenubarItem>{t("map.menu.settings.screenshot.folder")}</MenubarItem>
+                        <MenubarItem onSelect={changeDirectory}>{t("map.menu.settings.screenshot.folder")}</MenubarItem>
                         <MenubarItem onSelect={changeScreenshotAutoDelete}>
                             {t("map.menu.settings.screenshot.autoDelete")}
                             <MenubarShortcut>

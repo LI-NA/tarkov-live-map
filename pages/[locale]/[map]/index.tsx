@@ -192,7 +192,12 @@ export default function MapIndex() {
     return (
         <>
             <div className="fixed top-0 left-0 z-10">
-                <MapMenu map={map} settings={settings} saveSettings={saveSettings} />
+                <MapMenu
+                    map={map}
+                    settings={settings}
+                    saveSettings={saveSettings}
+                    changeDirectory={onClickInitDialogAction}
+                />
             </div>
             <MapStage map={map} myPositions={screenshotVectors} settings={settings} />
             <AlertDialog open={initDialogOpen}>
